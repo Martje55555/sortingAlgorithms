@@ -1,0 +1,28 @@
+.container-array {
+    position: absolute;
+    margin-top: 100px;
+    left: 100px;
+    right: 100px;
+}
+
+.array-bar {
+    width: 4px;
+    display: inline-block;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+button {
+    margin-left: 4px;
+}
+
+.button-container {
+    position: relative;
+    top: 50px;
+    left: 100px;
+    
+}
+
+button :active {
+    background-color: none;
+}
