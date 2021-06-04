@@ -1,80 +1,48 @@
-export function quickSortAnimations(array) {
-    const animations = [];
-    if (array.length <= 1) {
-      return array;
-    }
+// export function quickSortAnimations(array) {
+//     const animations = [];
+//     if (array.length <= 1) {
+//       return array;
+//     }
     
-    const pivot = array[array.length-1];
-    const leftArr = [];
-    const rightArr = [];
-    for (const el of array.slice(0, array.length-1)){
-      el <= pivot ? leftArr.push(el) : rightArr.push(el);
-    //   animations.push(["comparison1",el,pivot]); //To colour the compared values
-    //   animations.push(["comparison2",el,pivot]); //To take the colours off
+//     const pivot = array[array.length-1];
+//     const leftArr = [];
+//     const rightArr = [];
+//     for (const el of array.slice(0, array.length-1)){
+//       el <= pivot ? leftArr.push(el) : rightArr.push(el);
+//     //   animations.push(["comparison1",el,pivot]); //To colour the compared values
+//     //   animations.push(["comparison2",el,pivot]); //To take the colours off
 
-      animations.push([el,pivot]); //To colour the compared values
-      animations.push([el,pivot]); //To take the colours off
-  }
+//       animations.push(["first",el,pivot]); //To colour the compared values
+//       animations.push(["second",el,pivot]); //To take the colours off
+//   }
+ 
+//     const sortArray = [...quickSortAnimations(leftArr), pivot, ...quickSortAnimations(rightArr)];
+//     //return sortArray;
+//     return [animations, sortArray];
 
-    array = [...quickSortAnimations(leftArr), pivot, ...quickSortAnimations(rightArr)];
-    return animations;
-    //return [animations, sortArray];
+//   }
+function compare(a/*: number*/, b/*: number*/)/*: ['compare', number, number]*/ {
+  return ['compare', a, b];
+}
+function swap(a/*: number*/, b/*: number*/)/*: ['swap', number, number]*/ {
+  return ['swap', a, b];
+}
 
-  }
-
-
-
-// export const quickSortAnimations = (array) => {
-//     const sortingAnimations = [];
-//     if (array.length <= 1) return array;
-
-//     //  quickSortRecursive(array, 0, array.length - 1, sortingAnimations);
-//     quickSort(array, 0, array.length-1, sortingAnimations);
-//     return array;
-// };
-
-
-// function swap(items, leftIndex, rightIndex, sortingAnimations) {
-//     var temp = items[leftIndex];
-//     items[leftIndex] = items[rightIndex];
-//     items[rightIndex] = temp;
-// }
-// function partition(items, left, right, sortingAnimations) {
-//     var pivot = items[Math.floor((right + left) / 2)], //middle element
-//         i = left, //left pointer
-//         j = right; //right pointer
-//     while (i <= j) {
-//         while (items[i] < pivot) {
-//             i++;
-//         }
-//         while (items[j] > pivot) {
-//             j--;
-//         }
-//         if (i <= j) {
-//             swap(items, i, j, sortingAnimations); //sawpping two elements
-//             i++;
-//             j--;
-//         }
-//     }
-//     return i;
-// }
-
-// function quickSort(items, left, right, sortingAnimations) {
-//     var index;
-//     if (items.length > 1) {
-//         index = partition(items, left, right, sortingAnimations); //index returned from partition
-
-//         sortingAnimations.push(left, index-1);
-//         sortingAnimations.push(left, index-1);
-
-//         if (left < index - 1) { //more elements on the left side of the pivot
-//             sortingAnimations.push(left, items[index-1]);
-//             quickSort(items, left, index - 1, sortingAnimations);
-//         }
-//         if (index < right) { //more elements on the right side of the pivot
-//             sortingAnimations.push(right, items[index]);
-//             quickSort(items, index, right, sortingAnimations);
-//         }
-//     }
-//     return items;
-// }
+export function* quickSort(from/*: number*/, to/*: number*/)/*: Generator<['swap' | 'compare', number, number], void, number> */ {
+	if(to - from <= 1) {
+		return; // An array with the length of 1 or smaller is always sorted
+	}
+	// Pick pivot
+	const pivot = to - 1;
+	// Partition
+	let i = from;
+	for(let j = from; j < to; j++) {
+		if((yield compare(j, pivot)) < 0) {
+			yield swap(i, j);
+			i++;
+		}
+	}
+	yield swap(i, pivot)
+	yield* quickSort(from, i);
+	yield* quickSort(i + 1, to);
+}

@@ -10,6 +10,7 @@
     display: inline-block;
     margin-left: 2px;
     margin-right: 2px;
+    background: teal;
 }
 
 button {
@@ -25,4 +26,21 @@ button {
 
 button :active {
     background-color: none;
+}
+
+.array {
+	height: 100px;
+	position: relative;
+    display: inline-block;
+    margin-left: 2px;
+    margin-right: 2px;
+    width: 4px;
+}
+
+.bar {
+	position: absolute;
+	box-sizing: border-box;
+	background: grey;
+	border: 1px solid white;
+	/*transition: left 0.2s;*/
 }
