@@ -3,8 +3,9 @@ import { useState } from 'react';
 
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import RangeSlider from 'react-bootstrap-range-slider'
-import  useWindowDimensions  from './useWindowDimensions.js';
+import useWindowDimensions from './useWindowDimensions.js';
 import { mergeSortAnimations } from './algorithms/mergeSort.js';
+import { quickSortAnimations } from './algorithms/quickSort.js';
 import './animation.css';
 
 const SortingAlgorithms = () => {
@@ -12,7 +13,7 @@ const SortingAlgorithms = () => {
     const [array, setArray] = useState([]);
     const [speed, setSpeed] = useState(50);
     const { height, width } = useWindowDimensions();
-  //  const { refresh, setRefresh } = useState(false)
+    //  const { refresh, setRefresh } = useState(false)
     const randomInt = (min, max) => {
         return Math.floor(Math.random() * (max - min + 1) + min);
     };
@@ -20,8 +21,8 @@ const SortingAlgorithms = () => {
     const genArray = () => {
         const array = [];
         let arraySize = width <= 500 ? 25 : (width / 10);
-        arraySize = width <= 400 ? 18 : (width / 10) -1;
-        if(width < 500 && width > 400 ) {
+        arraySize = width <= 400 ? 18 : (width / 10) - 1;
+        if (width < 500 && width > 400) {
             arraySize = 25;
         } else if (width >= 300 && width <= 400) {
             arraySize = 14;
@@ -34,13 +35,11 @@ const SortingAlgorithms = () => {
         } else if (width <= 600 && width >= 500) {
             arraySize = 40;
         }
-        for (let i = 0; i < arraySize ; i++) {
+        for (let i = 0; i < arraySize; i++) {
             array.push(randomInt(5, 750))
         };
         setArray(array);
     };
-
-    
 
     // const changeFunction = (e) => {
     //     const newSpeed = forceNumber(e.target.value);
@@ -68,22 +67,74 @@ const SortingAlgorithms = () => {
                 }, i * speed);
             }
         }
+        console.log(animations);
     }
 
-    // const quickSort = () => {
+    const quickSort = () => {
+        const animations = quickSortAnimations(array);
+
+        // for (let i = 0; i < animations.length; i++) {
+        //     const isColorChange = animations[i][0] === "comparison1" || animations[i][0] === "comparison2";
+        //     const arrayBars = document.getElementsByClassName('array-bar');
+        //     if (isColorChange === true) {
+        //         const [comparison, firstBarIndex, secondBarIndex] = animations[i];
+        //         const barColor = (animations[i][0] === "comparison1") ? 'red' : 'teal';
+        //         const firstBarStyle = arrayBars[firstBarIndex].style;
+        //         const secondBarStyle = arrayBars[secondBarIndex].style;
+        //         setTimeout(() => {
+        //             firstBarStyle.backgroundColor = barColor;
+        //             secondBarStyle.backgroundColor = barColor;
+        //         }, i * speed);
+        //     } 
+        //         setTimeout(() => {
+        //             const [comparison,firstBarIndex, updatedHeight] = animations[i];
+        //             const firstBarStyle = arrayBars[firstBarIndex].style;
+        //             firstBarStyle.height = `${updatedHeight}px`;
+        //         }, i * speed);
+
+        // }
+
+        for (let i = 0; i < animations.length; i++) {
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const colorChange = i % 3 !== 2;
+            if (colorChange) {
+                const [firstBarIndex, secondBarIndex] = animations[i];
+                const firstBarStyle = arrayBars[firstBarIndex] ? arrayBars[firstBarIndex].style : {};
+                const secondBarStyle = arrayBars[secondBarIndex] ? arrayBars[secondBarIndex].style : {};
+                const barColor = i % 3 === 0 ? 'red' : 'teal';
+                setTimeout(() => {
+                    firstBarStyle.backgroundColor = barColor;
+                    secondBarStyle.backgroundColor = barColor;
+                }, i * speed);
+            } else {
+                setTimeout(() => {
+                    const [firstBarIndex, updatedHeight] = animations[i];
+                    const barStyle = arrayBars[firstBarIndex] ? arrayBars[firstBarIndex].style : {};
+                    //const firstBarStyle = arrayBars[firstBarIndex].style;
+                    barStyle.height = `${updatedHeight}px`;
+                }, i * speed);
+            }
+        }
+
+        console.log(animations);
+
+        //  test if array is sorted
+        // const temp = array;
+        // temp.sort();
+        //   const animations = quickSortAnimations(array); 
+        //  console.log(animations);
+    }
+
+    // const bubbleSort = () => {
 
     // }
 
-    // const quickSort = () => {
-        
-    // }
+    // const heapSort = () => {
 
-    // const quickSort = () => {
-        
-    // }
+    // } 
 
-    // const quickSort = () => {
-        
+    // const insertionSort = () => {
+
     // }
 
     return (
@@ -116,7 +167,7 @@ const SortingAlgorithms = () => {
                     <div className="fluid button-container">
                         <button className="big ui basic button" onClick={() => { genArray() }}>Generate Array</button>
                         <button className="big ui basic button" onClick={() => mergeSort()}>Merge Sort</button>
-                        <button className="big ui basic button" onClick={() => mergeSort()}>Quick Sort</button>
+                        <button className="big ui basic button" onClick={() => quickSort()}>Quick Sort</button>
                         <button className="big ui basic button" onClick={() => mergeSort()}>Bubble Sort</button>
                         <button className="big ui basic button" onClick={() => mergeSort()}>Heap Sort</button>
                         <button className="big ui basic button" onClick={() => mergeSort()}>Insertion Sort</button>
@@ -129,9 +180,9 @@ const SortingAlgorithms = () => {
 
 
                     <div>
-                       <RangeSlider
-                       value={speed}
-                       onChange={e => { setSpeed(e.target.value); console.log(speed)}} />
+                        <RangeSlider
+                            value={speed}
+                            onChange={e => { setSpeed(e.target.value); console.log(speed) }} />
                     </div>
 
 
